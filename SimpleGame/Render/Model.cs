@@ -8,6 +8,58 @@ using OpenTK.Mathematics;
 
 namespace SimpleGame.Render
 {
+    public class ObjModel
+    {
+        private Vector3[] _vertex;
+        private Vector2[] _uv;
+
+        private int _vao;
+        private int _vboVertex;
+        private int _vboUV;
+
+        public ObjModel(Vector3[] vertices, Vector2[] uv)
+        {
+            _vertex = vertices;
+            _uv = uv;
+        }
+
+        public unsafe void InitializeGL()
+        {
+            _vao = GL.GenVertexArray();
+            GL.BindVertexArray(_vao);
+
+            
+
+            _vboVertex = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vboVertex);
+            GL.BufferData(BufferTarget.ArrayBuffer, _vertex.Length * sizeof(Vector3), _vertex, BufferUsageHint.StaticDraw);
+
+
+            _vboUV = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vboUV);
+            GL.BufferData(BufferTarget.ArrayBuffer, _uv.Length * sizeof(Vector2), _uv, BufferUsageHint.StaticDraw);
+
+
+            
+
+        }
+
+        public void Render()
+        {
+            GL.EnableVertexAttribArray(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vboVertex);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+
+            GL.EnableVertexAttribArray(1);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vboUV);
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
+
+            GL.DrawArrays(PrimitiveType.Triangles, 0, _vertex.Length);
+
+            GL.DisableVertexAttribArray(0);
+            GL.DisableVertexAttribArray(1);
+        }
+    }
     public class Model
     {
         private float[] _vertexData;
@@ -28,13 +80,13 @@ namespace SimpleGame.Render
 
         public Model(string path)
         {
-            var loaderFactory = new ObjLoaderFactory();
-            var loader = loaderFactory.Create();
-            var result = loader.Load(new FileStream(path, FileMode.Open));
+            //var loaderFactory = new ObjLoaderFactory();
+            //var loader = loaderFactory.Create();
+            //var result = loader.Load(new FileStream(path, FileMode.Open));
 
-            Console.WriteLine(result.Vertices.Count);
-            Console.WriteLine(result.Textures.Count);
-            Console.WriteLine(result.Groups[0].Faces.Count);
+            //Console.WriteLine(result.Vertices.Count);
+            //Console.WriteLine(result.Textures.Count);
+            //Console.WriteLine(result.Groups[0].Faces.Count);
             /*
             Vertex[] vertices = new[]
             {

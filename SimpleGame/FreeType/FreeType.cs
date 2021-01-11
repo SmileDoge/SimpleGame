@@ -62,8 +62,6 @@ namespace SimpleGame.FreeTypeHelper
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
             GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * 6 * 4, IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
 
             _shader = new Shader("./Resources/textShader.vert", "./Resources/textShader.frag");
             _shader.SetMatrix4("projection", _projection);
@@ -112,7 +110,10 @@ namespace SimpleGame.FreeTypeHelper
 
                 GL.BindTexture(TextureTarget.Texture2D, c.Texture);
 
+                GL.EnableVertexAttribArray(0);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
+                GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
+
                 GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.DynamicDraw);
 
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 6);

@@ -16,7 +16,7 @@ namespace SimpleGame
     public class App : GameWindow
     {
         private RenderEngine _engine;
-        private Model _model;
+        private ObjModel _model;
 
         private Texture _texture;
 
@@ -44,7 +44,10 @@ namespace SimpleGame
                 0, 1, 3,
                 1, 2, 3
             };
-            _model = new Model("./Resources/untitled1.obj");
+            //_model = new Model("./Resources/untitled1.obj");
+
+            var _model2 = ModelLoader.LoadFromFile("./Resources/untitled1.obj");
+            _model = new ObjModel(_model2.Vertex.ToArray(), _model2.UV.ToArray());
 
             _freeType = new FreeType("C:/Windows/Fonts/segoeuisl.ttf");
             _fontRenderer = new FontRenderer(Size.X, Size.Y);
@@ -94,10 +97,12 @@ namespace SimpleGame
             _freeType.Done();
             _texture = Texture.LoadFromFile("Resources/text.jpg");
             //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-            _view = _view * Matrix4.CreateTranslation(0.0f, 0.0f, -3.0f);
+            _view = _view * Matrix4.CreateTranslation(0.0f, -1.0f, -3.0f);
             //_view = _view * Matrix4.CreateFromQuaternion(new Quaternion(0f, 45f, 0f));
             
             _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(70f), Size.X / (float)Size.Y, 0.1f, 100.0f);
+
+
 
             base.OnLoad();
         }
@@ -107,7 +112,7 @@ namespace SimpleGame
 
             _time += 3.0 * args.Time;
 
-            Quaternion qt = new Quaternion(0f, Convert.ToSingle(_time), 0f);
+            Quaternion qt = new Quaternion(0f, 0f, 0f);
 
             var matrix = Matrix4.Identity;
             matrix = matrix * Matrix4.CreateFromQuaternion(qt);
