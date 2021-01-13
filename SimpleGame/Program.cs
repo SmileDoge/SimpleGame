@@ -16,8 +16,8 @@ namespace SimpleGame
             var gws = new GameWindowSettings
             {
                 IsMultiThreaded = false,
-                RenderFrequency = 0,
-                UpdateFrequency = 0,
+                RenderFrequency = 300,
+                UpdateFrequency = 300,
             };
 
             App app = new App(gws, nws);

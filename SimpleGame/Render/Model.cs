@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using ObjLoader.Loader.Loaders;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
@@ -137,6 +136,8 @@ namespace SimpleGame.Render
         {
             _vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(_vertexArrayObject);
+
+            
 
             _vertexBufferObject = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);

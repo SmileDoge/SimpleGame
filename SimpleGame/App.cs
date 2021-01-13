@@ -20,37 +20,42 @@ namespace SimpleGame
 
         private Texture _texture;
 
-        private Matrix4 _view = Matrix4.Identity;
-        private Matrix4 _projection = Matrix4.Identity;
-
-        private double _time;
+        private float _oldWheel;
 
         private FontRenderer _fontRenderer;
         private FreeType _freeType;
         private PluginLoader _pluginLoader;
 
+        private double _maxFps;
+
+        public RenderEngine Engine { get { return _engine; } }
+        public FontRenderer FontRenderer { get { return _fontRenderer; } }
+        public double MaxFPS { 
+            get { return _maxFps; }
+            set
+            {
+                value = Math.Clamp(value, 1, 500);
+                RenderFrequency = value;
+                UpdateFrequency = value;
+                _maxFps = value;
+            } 
+        }
+
         public App(GameWindowSettings gws, NativeWindowSettings nws) : base(gws, nws)
         {
-            _engine = new RenderEngine();
-            Vertex[] vertices = new[]
-            {
-                new Vertex(new Vector3(0.5f, 0.5f, 0.0f), new Vector2(1.0f, 1.0f)),
-                new Vertex(new Vector3(0.5f, -0.5f, 0.0f), new Vector2(1.0f, 0.0f)),
-                new Vertex(new Vector3(-0.5f, -0.5f, 0.0f), new Vector2(0.0f, 0.0f)),
-                new Vertex(new Vector3(-0.5f, 0.5f, 0.0f), new Vector2(0.0f, 1.0f)),
-            };
-            var indices = new uint[]
-            {
-                0, 1, 3,
-                1, 2, 3
-            };
-            //_model = new Model("./Resources/untitled1.obj");
+            _engine = new RenderEngine(nws.Size.X, nws.Size.Y);
+            _engine.Camera.Fov = 90f;
+            _engine.Camera.Sensitivity = 0.7f;
+
+            _maxFps = RenderFrequency;
+            MaxFPS = RenderFrequency;
 
             var _model2 = ModelLoader.LoadFromFile("./Resources/untitled1.obj");
             _model = new ObjModel(_model2.Vertex.ToArray(), _model2.UV.ToArray());
 
             _freeType = new FreeType("C:/Windows/Fonts/segoeuisl.ttf");
             _fontRenderer = new FontRenderer(Size.X, Size.Y);
+
             _pluginLoader = new PluginLoader();
             _pluginLoader.LoadPlugin("SimplePlugin");
 
@@ -72,17 +77,6 @@ namespace SimpleGame
             {
                 new Character(c.ToString());
             }
-
-
-            /*
-            float[] _vertices =
-            {
-                -0.5f, -0.5f, 0.0f, // Bottom-left vertex
-                 0.5f, -0.5f, 0.0f, // Bottom-right vertex
-                 0.0f,  0.5f, 0.0f  // Top vertex
-            };
-            _model = new Model(_vertices);
-            */
         }
 
         protected override void OnLoad()
@@ -96,11 +90,8 @@ namespace SimpleGame
             }
             _freeType.Done();
             _texture = Texture.LoadFromFile("Resources/text.jpg");
-            //GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-            _view = _view * Matrix4.CreateTranslation(0.0f, -1.0f, -3.0f);
-            //_view = _view * Matrix4.CreateFromQuaternion(new Quaternion(0f, 45f, 0f));
-            
-            _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(70f), Size.X / (float)Size.Y, 0.1f, 100.0f);
+
+            CursorGrabbed = true;
 
 
 
@@ -109,9 +100,6 @@ namespace SimpleGame
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-
-            _time += 3.0 * args.Time;
-
             Quaternion qt = new Quaternion(0f, 0f, 0f);
 
             var matrix = Matrix4.Identity;
@@ -122,8 +110,6 @@ namespace SimpleGame
             _engine.Begin();
             _texture.Use(TextureUnit.Texture0);
             _engine.SetMatrix("model", matrix);
-            _engine.SetMatrix("view", _view);
-            _engine.SetMatrix("projection", _projection);
             
             _model.Render();
             _engine.End();
@@ -131,6 +117,8 @@ namespace SimpleGame
             var _fps = Math.Round(1d / args.Time);
 
             _fontRenderer.PrintText(_fps.ToString(), 0f, 0f, 1f, new Vector3(0.8f, 0.2f, 0.1f));
+            _fontRenderer.PrintText(_engine.Camera.Fov.ToString(), 0f, 0.1f, 1f, new Vector3(0.8f, 0.2f, 0.1f));
+
 
             SwapBuffers();
 
@@ -139,23 +127,39 @@ namespace SimpleGame
 
         protected override void OnResize(ResizeEventArgs e)
         {
-            GL.Viewport(0, 0, e.Width, e.Height);
-
-            _projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(70f), e.Width / (float)e.Height, 0.1f, 100.0f);
+            _engine.Resize(e.Width, e.Height);
             _fontRenderer.UpdateProjection(e.Width, e.Height);
 
+            
 
             base.OnResize(e);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
+            
             if (KeyboardState.IsKeyDown(Keys.Escape))
             {
                 Close();
             }
 
+            if (!IsFocused)
+            {
+                return;
+            }
+            _engine.Camera.Controll(KeyboardState, MouseState, (float)args.Time);
+
             base.OnUpdateFrame(args);
         }
+
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            _engine.Camera.Fov += (_oldWheel - e.OffsetY);
+
+            _oldWheel = e.OffsetY;
+
+            base.OnMouseWheel(e);
+        }
+
     }
 }

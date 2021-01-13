@@ -4,10 +4,11 @@ using System.Text;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using SimpleGame.API.Render;
 
 namespace SimpleGame.Render
 {
-    public class Shader
+    public class Shader : IShader
     {
         public readonly int Handle;
 

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using OpenTK.Graphics.OpenGL4;
+using SimpleGame.API.Render;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace SimpleGame.Render
 {
-    public class Texture
+    public class Texture : ITexture
     {
         public readonly int Handle;
 
@@ -22,8 +23,6 @@ namespace SimpleGame.Render
 
             using (var image = Image.Load<Bgra32>(path))
             {
-                image.Mutate(x => x.Rotate(180)) ;
-                image.Mutate(x => x.Flip(FlipMode.Horizontal));
 
                 if (image.TryGetSinglePixelSpan(out var pixelSpan))
                 {
@@ -66,6 +65,11 @@ namespace SimpleGame.Render
         public Texture(int glHandle)
         {
             Handle = glHandle;
+        }
+
+        public void Use(int unit)
+        {
+            Use((TextureUnit)unit);
         }
 
         public void Use(TextureUnit unit)
