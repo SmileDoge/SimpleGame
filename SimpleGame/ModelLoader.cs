@@ -31,7 +31,7 @@ namespace SimpleGame
 
             while ((line = file.ReadLine()) != null)
             {
-                line = line.Replace(".", ",");
+                if (line.Length <= 2) continue;
                 var start = line.Substring(0, 2);
 
                 switch (start)
