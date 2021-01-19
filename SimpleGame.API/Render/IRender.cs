@@ -6,6 +6,6 @@ namespace SimpleGame.API.Render
 {
     public interface IRender
     {
-        public void Render();
+        public abstract void Render();
     }
 }

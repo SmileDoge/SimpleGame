@@ -8,9 +8,9 @@ namespace SimpleGame.Render
 {
     public class RenderEngine
     {
-        private Shader _shader;
-
         private Camera _camera;
+
+
         public Camera Camera { get { return _camera; } }
 
         public RenderEngine(float width, float height)
@@ -27,34 +27,13 @@ namespace SimpleGame.Render
 
         public void InitializeGL()
         {
-            GL.ClearColor(0.5f, 0.6f, 0.2f, 1.0f);
+            GL.ClearColor(0.2f, 0.23f, 0.21f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            GL.Enable(EnableCap.CullFace);
-            GL.CullFace(CullFaceMode.Back);
-
-            _shader = new Shader("./Resources/shader.vert", "./Resources/shader.frag");
-        }
-
-        public void Begin()
-        {
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            _shader.Use();
-            _shader.SetMatrix4("view", _camera.GetViewMatrix());
-            _shader.SetMatrix4("projection", _camera.GetProjectionMatrix());
-        }
-
-        public void SetMatrix(string uniform, Matrix4 matrix)
-        {
-            _shader.SetMatrix4(uniform, matrix);
-        }
-
-        public void End()
-        {
-            
+            //GL.Enable(EnableCap.CullFace);
+            //GL.CullFace(CullFaceMode.Back);
         }
     }
 }

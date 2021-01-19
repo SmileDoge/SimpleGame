@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenTK.Mathematics;
 using SimpleGame.API.Game;
 
 namespace SimpleGame.Game
 {
     public class World : IWorld
     {
-        private Dictionary<int, IObject> _objects;
+
+        private Dictionary<int, IObject> _objects = new Dictionary<int, IObject>();
+
+        public Vector3 LightColor = new Vector3(1f, 1f, 1f);
+        public Vector3 LightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
         public IObject GetObject(int id)
         {
@@ -23,13 +28,15 @@ namespace SimpleGame.Game
 
         public int AddObject(IObject obj)
         {
-            var random = new Random();
-            var id = random.Next(1, 100000);
-            while (_objects.ContainsKey(id))
+            int id;
+            do
             {
-                id = random.Next(1, 100000);
-            }
+                id = new Random().Next(1, 100000);
+            } 
+            while (_objects.ContainsKey(id));
             obj.ObjectID = id;
+
+            _objects.Add(id, obj);
 
             return id;
         }
@@ -39,6 +46,14 @@ namespace SimpleGame.Game
             if (_objects.ContainsKey(id))
             {
                 _objects.Remove(id);
+            }
+        }
+
+        public void Render()
+        {
+            foreach (var obj in _objects)
+            {
+                obj.Value.Render();
             }
         }
     }

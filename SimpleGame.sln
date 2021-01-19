@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGame", "SimpleGame\SimpleGame.csproj", "{A1374EE0-B958-46C8-97F0-7B109800A081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleGame", "SimpleGame\SimpleGame.csproj", "{A1374EE0-B958-46C8-97F0-7B109800A081}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGame.API", "SimpleGame.API\SimpleGame.API.csproj", "{5CB5E9FD-246B-444D-AC86-8ABB8FAC8353}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleGame.API", "SimpleGame.API\SimpleGame.API.csproj", "{5CB5E9FD-246B-444D-AC86-8ABB8FAC8353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePlugin", "SimplePlugin\SimplePlugin.csproj", "{C3A52231-2CC9-47F3-B013-359F88A0DECF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimplePlugin", "SimplePlugin\SimplePlugin.csproj", "{C3A52231-2CC9-47F3-B013-359F88A0DECF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

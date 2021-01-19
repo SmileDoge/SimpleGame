@@ -64,7 +64,6 @@ namespace SimpleGame.FreeTypeHelper
 
 
             _shader = new Shader("./Resources/textShader.vert", "./Resources/textShader.frag");
-            _shader.SetMatrix4("projection", _projection);
         }
 
         public void PrintText(string text, float x, float y, float scale, Vector3 color)
@@ -112,7 +111,7 @@ namespace SimpleGame.FreeTypeHelper
 
                 GL.EnableVertexAttribArray(0);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
-                GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
+                GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 0, 0);
 
                 GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.DynamicDraw);
 

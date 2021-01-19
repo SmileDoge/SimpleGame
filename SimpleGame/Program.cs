@@ -20,7 +20,8 @@ namespace SimpleGame
                 UpdateFrequency = 300,
             };
 
-            App app = new App(gws, nws);
+            MainGame app = new MainGame(gws, nws);
+            MainGame.Instance = app;
             app.Run();
         }
     }

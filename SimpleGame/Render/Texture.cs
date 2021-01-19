@@ -12,6 +12,8 @@ namespace SimpleGame.Render
 {
     public class Texture : ITexture
     {
+        private static Dictionary<string, Texture> _textures = new Dictionary<string, Texture>();
+
         public readonly int Handle;
 
         public static Texture LoadFromFile(string path)
@@ -76,6 +78,22 @@ namespace SimpleGame.Render
         {
             GL.ActiveTexture(unit);
             GL.BindTexture(TextureTarget.Texture2D, Handle);
+        }
+
+        public static bool RegisterTexture(string id, Texture texture)
+        {
+            if (_textures.ContainsKey(id)) return false;
+            _textures.Add(id, texture);
+            return true;
+        }
+
+        public static Texture GetTexture(string id)
+        {
+            if (_textures.TryGetValue(id, out var result))
+            {
+                return result;
+            }
+            return null;
         }
     }
 }
